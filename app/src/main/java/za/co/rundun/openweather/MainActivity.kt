@@ -1,44 +1,71 @@
-package com.example.openweather
+package za.co.rundun.openweather
 
 import android.Manifest
-import android.content.DialogInterface
+import android.content.*
 import android.content.pm.PackageManager
 import android.location.Location
-import android.os.Build
-import android.os.Bundle
+import android.os.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.openweather.data.viewmodel.SharedViewModel
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.*
+import za.co.rundun.openweather.data.viewmodel.SharedViewModel
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
+import za.co.rundun.openweather.common.SharedPreferenceUtil
+import za.co.rundun.openweather.service.WeatherLocationService
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(),
     OnSuccessListener<Location>,
+    SharedPreferences.OnSharedPreferenceChangeListener,
     PermissionsFragmentCallback {
 
+    private lateinit var sharedPreferences:SharedPreferences
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var foregroundOnlyBroadcastReceiver: WeatherLocationServiceBroadcastReceiver
+    private var weatherLocationService: WeatherLocationService? = null
+    private var weatherLocationServiceBound = false
     private val sharedViewModel: SharedViewModel by viewModels()
 
     companion object {
         private const val PERMISSION_REQUEST_CODE = 200
+        private const val REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE = 34
+    }
+
+    private val foregroundOnlyServiceConnection = object : ServiceConnection {
+
+        override fun onServiceConnected(name: ComponentName, service: IBinder) {
+            val binder = service as WeatherLocationService.LocalBinder
+            weatherLocationService = binder.service
+            weatherLocationServiceBound = true
+        }
+
+        override fun onServiceDisconnected(name: ComponentName) {
+            weatherLocationService = null
+            weatherLocationServiceBound = false
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        foregroundOnlyBroadcastReceiver = WeatherLocationServiceBroadcastReceiver()
+        sharedPreferences =
+            getSharedPreferences(getString(R.string.location_preference_key), Context.MODE_PRIVATE)
+
         fusedLocationClient =
             LocationServices.getFusedLocationProviderClient(this)
+
+//        updateValuesFromBundle(savedInstanceState)
 
         val navController = findNavController(this, R.id.nav_host_fragment)
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav_view)
@@ -51,11 +78,58 @@ class MainActivity : AppCompatActivity(),
             }
         })
     }
+//    private fun updateValuesFromBundle(savedInstanceState: Bundle?) {
+//        savedInstanceState ?: return
+//
+//        // Update the value of requestingLocationUpdates from the Bundle.
+//        if (savedInstanceState.keySet().contains(REQUESTING_LOCATION_UPDATES_KEY)) {
+//            requestingLocationUpdates = savedInstanceState.getBoolean(
+//                    REQUESTING_LOCATION_UPDATES_KEY)
+//        }
+//    }
+//
+//
+//    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
+//        outState?.putBoolean(REQUESTING_LOCATION_UPDATES_KEY, requestingLocationUpdates)
+//        super.onSaveInstanceState(outState, outPersistentState)
+//    }
 
-    override fun onSuccess(location: Location?) {
-        if (location != null) {
-            sharedViewModel.getCurrentWeather(location.latitude, location.longitude)
+    override fun onStart() {
+        super.onStart()
+
+//        updateButtonState(
+//            sharedPreferences.getBoolean(SharedPreferenceUtil.KEY_FOREGROUND_ENABLED, false)
+//        )
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this)
+
+        val serviceIntent = Intent(this, WeatherLocationService::class.java)
+        bindService(serviceIntent, foregroundOnlyServiceConnection, Context.BIND_AUTO_CREATE)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+            foregroundOnlyBroadcastReceiver,
+            IntentFilter(
+                WeatherLocationService.ACTION_FOREGROUND_ONLY_LOCATION_BROADCAST)
+        )
+    }
+
+    override fun onPause() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(
+            foregroundOnlyBroadcastReceiver
+        )
+        super.onPause()
+    }
+
+    override fun onStop() {
+        if (weatherLocationServiceBound) {
+            unbindService(foregroundOnlyServiceConnection)
+            weatherLocationServiceBound = false
         }
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
+
+        super.onStop()
     }
 
     override fun onRequestPermissionsResult(
@@ -126,6 +200,36 @@ class MainActivity : AppCompatActivity(),
 
     override fun onCheckPermissions(): Boolean {
         return checkPermission()
+    }
+
+    override fun onSuccess(location: Location?) {
+        if (location != null) {
+            sharedViewModel.getCurrentWeather(location.latitude, location.longitude)
+        } else if(checkPermission()) {
+            weatherLocationService?.subscribeToLocationUpdates()
+        }
+    }
+
+    private inner class WeatherLocationServiceBroadcastReceiver : BroadcastReceiver() {
+
+        override fun onReceive(context: Context, intent: Intent) {
+            val location = intent.getParcelableExtra<Location>(
+                WeatherLocationService.EXTRA_LOCATION
+            )
+
+            if (location != null) {
+                sharedViewModel.getCurrentWeather(location.latitude, location.longitude)
+//                logResultsToScreen("Foreground location: ${location.toText()}")
+            }
+        }
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        if (key == SharedPreferenceUtil.KEY_FOREGROUND_ENABLED) {
+//            updateButtonState(sharedPreferences.getBoolean(
+//                SharedPreferenceUtil.KEY_FOREGROUND_ENABLED, false)
+//            )
+        }
     }
 }
 

@@ -1,4 +1,4 @@
-package com.example.openweather.adapter
+package za.co.rundun.openweather.adapter
 
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter

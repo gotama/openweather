@@ -1,4 +1,4 @@
-package com.example.openweather.fragment
+package za.co.rundun.openweather.fragment
 
 import android.content.Context
 import android.net.Uri
@@ -10,10 +10,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
-import com.example.openweather.PermissionsFragmentCallback
-import com.example.openweather.R
-import com.example.openweather.data.viewmodel.SharedViewModel
-import com.example.openweather.databinding.FragmentHomeBinding
+import za.co.rundun.openweather.PermissionsFragmentCallback
+import za.co.rundun.openweather.R
+import za.co.rundun.openweather.data.viewmodel.SharedViewModel
+import za.co.rundun.openweather.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -21,16 +21,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private lateinit var binding: FragmentHomeBinding
     private val sharedViewModel: SharedViewModel by activityViewModels()
-
-    // TODO
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//
-//        // Button -> get the current weather
-//        // TextVIew -> updates the state
-//        // Animate -> animate through states
-//        // Navigate to CurrentWeatherFragment
-//    }
 
     private lateinit var fragmentCallback: PermissionsFragmentCallback
     override fun onAttach(context: Context) {
@@ -57,17 +47,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
         sharedViewModel.weather.observe(viewLifecycleOwner) { weatherList ->
             var url = "http://openweathermap.org/img/w/" + weatherList[0].icon + ".png"
-            binding.weatherImage.setImageURI(Uri.parse(url))
+//            binding.weatherImage.setImageURI(Uri.parse(url))
+            sharedViewModel.imageUrl = url;
             binding.weatherDescription.text = weatherList[0].base
         }
-
-// TODO Remove HomeViewModel
-//        viewModel.imageUrl.observe(viewLifecycleOwner, Observer { newImgUrl ->
-//            binding.weatherImage.setImageURI(Uri.parse(newImgUrl))
-//        })
-//        viewModel.base.observe(viewLifecycleOwner, Observer { newBase ->
-//            binding.weatherDescription.text = newBase
-//        })
 
         binding.setClickListener { view ->
             when (view.id) {

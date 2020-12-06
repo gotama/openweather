@@ -1,6 +1,6 @@
-package com.example.openweather.di
+package za.co.rundun.openweather.di
 
-import com.example.openweather.data.api.service.WeatherService
+import za.co.rundun.openweather.data.api.service.WeatherService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

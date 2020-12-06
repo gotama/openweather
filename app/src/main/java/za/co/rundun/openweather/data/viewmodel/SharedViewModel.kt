@@ -1,13 +1,13 @@
-package com.example.openweather.data.viewmodel
+package za.co.rundun.openweather.data.viewmodel
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.openweather.common.WeatherResult
-import com.example.openweather.data.database.Weather
-import com.example.openweather.data.database.WeatherRepository
+import za.co.rundun.openweather.common.WeatherResult
+import za.co.rundun.openweather.data.database.Weather
+import za.co.rundun.openweather.data.database.WeatherRepository
 import kotlinx.coroutines.launch
 
 class SharedViewModel @ViewModelInject internal constructor(
@@ -31,6 +31,13 @@ class SharedViewModel @ViewModelInject internal constructor(
     fun selectItem(item: Int) {
         mutableSelectedItem.value = item
     }
+
+    private var _imageUrl:  String? = null
+    var imageUrl
+        get() = _imageUrl
+        set(value) {
+            _imageUrl = value
+        }
 
     fun getCurrentWeather(latitude: Double, longitude: Double) {
         viewModelScope.launch {

@@ -1,4 +1,4 @@
-package com.example.openweather.data.api.model
+package za.co.rundun.openweather.data.api.model
 
 import com.google.gson.annotations.SerializedName
 

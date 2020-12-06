@@ -1,8 +1,8 @@
-package com.example.openweather.di
+package za.co.rundun.openweather.di
 
 import android.content.Context
-import com.example.openweather.data.database.WeatherDAO
-import com.example.openweather.data.database.WeatherDatabase
+import za.co.rundun.openweather.data.database.WeatherDAO
+import za.co.rundun.openweather.data.database.WeatherDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

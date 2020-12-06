@@ -1,4 +1,4 @@
-package com.example.openweather.common
+package za.co.rundun.openweather.common
 
 sealed class WeatherResult<out E, out V> {
 

@@ -1,7 +1,7 @@
-package com.example.openweather.data.database
+package za.co.rundun.openweather.data.database
 
-import com.example.openweather.common.WeatherResult
-import com.example.openweather.data.api.service.WeatherService
+import za.co.rundun.openweather.common.WeatherResult
+import za.co.rundun.openweather.data.api.service.WeatherService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

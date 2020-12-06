@@ -1,4 +1,4 @@
-package com.example.openweather.view
+package za.co.rundun.openweather.view
 
 import android.annotation.SuppressLint
 import android.content.Context

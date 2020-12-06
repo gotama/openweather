@@ -29,9 +29,10 @@
 
         <za.co.rundun.openweather.view.WeatherCardView
             android:id="@+id/what_weather_card"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="250dp"
+            android:layout_height="300dp"
             android:onClick="@{clickListener}"
+            android:visibility="visible"
             app:cardElevation="2dp"
             app:cardPreventCornerOverlap="false"
             app:layout_constraintBottom_toTopOf="@+id/what_weather_button"
@@ -45,9 +46,10 @@
 
                 <ImageView
                     android:id="@+id/weather_image"
-                    android:layout_width="0dp"
+                    android:layout_width="95dp"
                     android:layout_height="95dp"
                     android:contentDescription="Weather Snapshot"
+                    app:imageFromUrl="@{sharedViewModel.imageUrl}"
                     android:scaleType="centerCrop"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

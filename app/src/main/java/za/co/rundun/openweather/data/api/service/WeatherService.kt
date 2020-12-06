@@ -1,7 +1,7 @@
-package com.example.openweather.data.api.service
+package za.co.rundun.openweather.data.api.service
 
-import com.example.openweather.BuildConfig
-import com.example.openweather.data.api.model.WeatherResponse
+import za.co.rundun.openweather.BuildConfig
+import za.co.rundun.openweather.data.api.model.WeatherResponse
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

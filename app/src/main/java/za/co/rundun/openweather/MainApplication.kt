@@ -1,4 +1,4 @@
-package com.example.openweather
+package za.co.rundun.openweather
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
