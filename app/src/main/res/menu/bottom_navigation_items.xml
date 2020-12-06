@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/action_request_weather"
+        android:title="@string/menu_weather"
+        android:icon="@drawable/ic_bar_restart" />
+    <item android:id="@+id/action_share_location"
+        android:title="@string/menu_location"
+        android:icon="@drawable/ic_bar_location_unknown" />
+</menu>

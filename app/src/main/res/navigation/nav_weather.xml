@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_weather"
+    app:startDestination="@id/view_home_fragment">
+
+    <fragment
+        android:id="@+id/view_home_fragment"
+        android:name="za.co.rundun.openweather.fragment.HomeFragment"
+        tools:layout="@layout/fragment_home">
+
+        <action
+            android:id="@+id/action_home_fragment_to_current_weather_fragment"
+            app:destination="@id/view_current_weather_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/view_current_weather_fragment"
+        android:name="za.co.rundun.openweather.fragment.CurrentWeatherFragment"
+        tools:layout="@layout/fragment_current_weather">
+
+        <action
+            android:id="@+id/action_view_pager_fragment_to_plant_detail_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+</navigation>
