@@ -13,8 +13,7 @@ fun bindImageFromUrl(view: ImageView, imageUrl: String?) {
     if (!imageUrl.isNullOrEmpty()) {
         val options: RequestOptions = RequestOptions()
             .fitCenter()
-            .placeholder(R.mipmap.ic_launcher_round)
-            .error(R.mipmap.ic_launcher)
+            .error(R.mipmap.ic_launcher_round)
 
         Glide.with(view.context)
             .load(imageUrl)

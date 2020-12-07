@@ -1,23 +1,21 @@
 package za.co.rundun.openweather.fragment
 
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
+import dagger.hilt.android.AndroidEntryPoint
 import za.co.rundun.openweather.PermissionsFragmentCallback
 import za.co.rundun.openweather.R
+import za.co.rundun.openweather.data.viewmodel.HomeViewModel
 import za.co.rundun.openweather.data.viewmodel.SharedViewModel
 import za.co.rundun.openweather.databinding.FragmentHomeBinding
-import dagger.hilt.android.AndroidEntryPoint
-import za.co.rundun.openweather.data.viewmodel.HomeViewModel
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home) {
@@ -49,24 +47,44 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.homeViewModel = homeViewModel
 
         sharedViewModel.spinner.observe(viewLifecycleOwner) { show ->
-            binding.spinner.visibility = if (show) View.VISIBLE else View.GONE
+            if (show) {
+                binding.spinner.alpha = 0f
+                binding.whatWeatherButton.alpha = 1f
+                binding.spinner.visibility = View.VISIBLE
+                binding.spinner.animate().alpha(1f).duration = 500
+                binding.whatWeatherButton.animate().alpha(0f).setDuration(500).withEndAction {
+                    binding.whatWeatherButton.visibility =  View.GONE
+                }
+            } else {
+                binding.spinner.alpha = 1f
+                binding.whatWeatherButton.alpha = 0f
+                binding.whatWeatherButton.visibility = View.VISIBLE
+                binding.spinner.animate().alpha(0f).setDuration(500).withEndAction {
+                    binding.spinner.visibility = View.GONE
+                }
+                binding.whatWeatherButton.animate().alpha(1f).duration = 500
+            }
+
         }
         sharedViewModel.weather.observe(viewLifecycleOwner) { weatherList ->
-            var url = "https://openweathermap.org/img/w/" + weatherList[0].icon + ".png"
-            homeViewModel.imageUrl = url
-            binding.weatherMain.text = weatherList[0].main
+
+            homeViewModel.imageUrl =
+                "https://openweathermap.org/img/w/" + weatherList[0].icon + ".png"
+            ("Expect " + weatherList[0].main).also { binding.weatherMain.text = it }
             binding.weatherDescription.text = weatherList[0].description
+            ("Surface measured at " + weatherList[0].temp.toString() + "\u2103").also { binding.weatherTemperature.text = it }
+            ("Atmosphere feels like " + weatherList[0].feelsLike.toString() + "\u2103").also { binding.weatherFeelsLikeTemperature.text = it }
             binding.weatherWindSpeed.text = weatherList[0].windSpeed.toString()
             binding.weatherWindDegree.text = weatherList[0].windDegree.toString()
+            homeViewModel.degreeAngle = weatherList[0].windDegree.toFloat()
             binding.invalidateAll()
+            binding.windDegreeAngle.startAnimation()
         }
 
         binding.setClickListener { view ->
             when (view.id) {
                 R.id.what_weather_button -> if (fragmentCallback.onCheckPermissions()) {
                     sharedViewModel.selectItem(2)
-                } else {
-                    sharedViewModel.selectItem(1)
                 }
                 R.id.what_weather_card -> {
 
