@@ -11,4 +11,11 @@ class HomeViewModel @ViewModelInject constructor() : ViewModel() {
         set(value) {
             _imageUrl = value
         }
+
+    private var _degreeAngle:  Float? = 0f
+    var degreeAngle
+        get() = _degreeAngle
+        set(value) {
+            _degreeAngle = value
+        }
 }

@@ -15,9 +15,12 @@ class WeatherRepository @Inject constructor(
             WeatherResult<Exception, List<Weather>> = withContext(Dispatchers.IO) {
         try {
             val weather = weatherService.getWeather(latitude, longitude)
-            weatherDao.insertWeather(
+            // TODO Scale into Gallery View
+            // here we set 1 to the weatherId to ensure we only keep the latest weather
+            // report, We could scale this into collections
+            weatherDao.insertOrReplace(
                 Weather(
-                    0L, longitude, latitude,
+                    1L, longitude, latitude,
                     weather.weather[0].description, weather.base, weather.name,
                     weather.wind.speed, weather.wind.degree, weather.weather[0].icon,
                     weather.weather[0].main, weather.main.temp, weather.main.feelsLike,

@@ -6,7 +6,7 @@ import androidx.room.*
 interface WeatherDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertWeather(weather: Weather)
+    fun insertOrReplace(weather: Weather)
 
     @Update
     fun updateWeather(vararg weather: Weather)
