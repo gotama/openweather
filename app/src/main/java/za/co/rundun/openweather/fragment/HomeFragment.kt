@@ -9,18 +9,22 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import za.co.rundun.openweather.PermissionsFragmentCallback
 import za.co.rundun.openweather.R
 import za.co.rundun.openweather.data.viewmodel.SharedViewModel
 import za.co.rundun.openweather.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
+import za.co.rundun.openweather.data.viewmodel.HomeViewModel
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private lateinit var binding: FragmentHomeBinding
     private val sharedViewModel: SharedViewModel by activityViewModels()
+    private val homeViewModel: HomeViewModel by viewModels()
 
     private lateinit var fragmentCallback: PermissionsFragmentCallback
     override fun onAttach(context: Context) {
@@ -40,16 +44,21 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             false
         )
         // TODO Investigate purpose
-//        binding.lifecycleOwner = viewLifecycleOwner
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.sharedViewModel = sharedViewModel
+        binding.homeViewModel = homeViewModel
 
         sharedViewModel.spinner.observe(viewLifecycleOwner) { show ->
             binding.spinner.visibility = if (show) View.VISIBLE else View.GONE
         }
         sharedViewModel.weather.observe(viewLifecycleOwner) { weatherList ->
-            var url = "http://openweathermap.org/img/w/" + weatherList[0].icon + ".png"
-//            binding.weatherImage.setImageURI(Uri.parse(url))
-            sharedViewModel.imageUrl = url;
-            binding.weatherDescription.text = weatherList[0].base
+            var url = "https://openweathermap.org/img/w/" + weatherList[0].icon + ".png"
+            homeViewModel.imageUrl = url
+            binding.weatherMain.text = weatherList[0].main
+            binding.weatherDescription.text = weatherList[0].description
+            binding.weatherWindSpeed.text = weatherList[0].windSpeed.toString()
+            binding.weatherWindDegree.text = weatherList[0].windDegree.toString()
+            binding.invalidateAll()
         }
 
         binding.setClickListener { view ->

@@ -14,7 +14,8 @@ interface WeatherService {
     suspend fun getWeather(
         @Query("lat") latitude: Double,
         @Query("lon") longitude: Double,
-        @Query("appid") appId: String = BuildConfig.WEATHER_ACCESS_KEY
+        @Query("appid") appId: String = BuildConfig.WEATHER_ACCESS_KEY,
+        @Query("units") units: String = "metric"
     ): WeatherResponse
 
     companion object {
