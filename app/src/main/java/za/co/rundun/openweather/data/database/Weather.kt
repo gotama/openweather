@@ -14,7 +14,12 @@ class Weather(
     val name: String,
     @ColumnInfo(name = "wind_speed") val windSpeed: Double,
     @ColumnInfo(name = "wind_degree") val windDegree: Int,
-    val icon: String
+    val icon: String,
+    val main: String,
+    val temp: Double,
+    @ColumnInfo(name = "feels_like") val feelsLike: Double,
+    @ColumnInfo(name = "temp_min") val tempMin: Double,
+    @ColumnInfo(name = "temp_max") val tempMax: Double
 ) {
     override fun toString(): String {
         return name

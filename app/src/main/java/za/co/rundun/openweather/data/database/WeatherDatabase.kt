@@ -28,15 +28,6 @@ abstract class WeatherDatabase : RoomDatabase() {
 
         private fun buildDatabase(context: Context): WeatherDatabase {
             return Room.databaseBuilder(context, WeatherDatabase::class.java, DATABASE_NAME).build()
-//                .addCallback(
-//                    object : RoomDatabase.Callback() {
-//                        override fun onCreate(db: SupportSQLiteDatabase) {
-//                            super.onCreate(db)
-//                            val request = OneTimeWorkRequestBuilder<SeedWeatherWorker>().build()
-//                            WorkManager.getInstance(context).enqueue(request)
-//                        }
-//                    }
-//                )
         }
     }
 }

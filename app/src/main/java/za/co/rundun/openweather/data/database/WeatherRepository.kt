@@ -19,7 +19,9 @@ class WeatherRepository @Inject constructor(
                 Weather(
                     0L, longitude, latitude,
                     weather.weather[0].description, weather.base, weather.name,
-                    weather.wind.speed, weather.wind.degree, weather.weather[0].icon
+                    weather.wind.speed, weather.wind.degree, weather.weather[0].icon,
+                    weather.weather[0].main, weather.main.temp, weather.main.feelsLike,
+                    weather.main.tempMin, weather.main.tempMax
                 )
             )
             WeatherResult.build { weatherDao.queryAllWeather() }

@@ -11,6 +11,10 @@
         <variable
             name="sharedViewModel"
             type="za.co.rundun.openweather.data.viewmodel.SharedViewModel" />
+
+        <variable
+            name="homeViewModel"
+            type="za.co.rundun.openweather.data.viewmodel.HomeViewModel" />
     </data>
 
 
@@ -46,14 +50,26 @@
 
                 <ImageView
                     android:id="@+id/weather_image"
-                    android:layout_width="95dp"
-                    android:layout_height="95dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="110dp"
+                    android:background="@color/cardview_dark_background"
                     android:contentDescription="Weather Snapshot"
-                    app:imageFromUrl="@{sharedViewModel.imageUrl}"
-                    android:scaleType="centerCrop"
+                    app:imageFromUrl="@{homeViewModel.imageUrl}"
+                    android:scaleType="fitCenter"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/weather_main"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center_horizontal"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/weather_image" />
 
                 <TextView
                     android:id="@+id/weather_description"
@@ -64,7 +80,29 @@
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/weather_image" />
+                    app:layout_constraintTop_toBottomOf="@id/weather_main" />
+
+                <TextView
+                    android:id="@+id/weather_wind_speed"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center_horizontal"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/weather_description" />
+
+                <TextView
+                    android:id="@+id/weather_wind_degree"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center_horizontal"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/weather_wind_speed" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </za.co.rundun.openweather.view.WeatherCardView>
