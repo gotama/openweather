@@ -22,9 +22,10 @@ class SharedViewModel @ViewModelInject internal constructor(
     val spinner: LiveData<Boolean>
         get() = _spinner
 
-    private val _snackbar = MutableLiveData<String?>()
-    val snackbar: LiveData<String?>
-        get() = _snackbar
+    // TODO build notification on the UI with this string
+    private val _message = MutableLiveData<String?>()
+    val message: LiveData<String?>
+        get() = _message
 
     // TODO Build Enumeration into Item
     private val mutableSelectedItem = MutableLiveData<Int>()
@@ -36,24 +37,16 @@ class SharedViewModel @ViewModelInject internal constructor(
         mutableSelectedItem.value = item
     }
 
-    private var _imageUrl: String? = null
-    var imageUrl
-        get() = _imageUrl
-        set(value) {
-            _imageUrl = value
-        }
-
     fun getCurrentWeather(latitude: Double, longitude: Double) {
         viewModelScope.launch {
 
-            val weatherResult = weatherRepository.fetchRecentWeather(latitude, longitude)
-            when (weatherResult) {
+            when (val weatherResult = weatherRepository.fetchRecentWeather(latitude, longitude)) {
                 is WeatherResult.Value -> {
                     _weather.value = weatherResult.value
                     _spinner.value = false
                 }
                 is WeatherResult.Error -> {
-                    _snackbar.value = weatherResult.error.message
+                    _message.value = weatherResult.error.message
                     _spinner.value = false
                 }
             }

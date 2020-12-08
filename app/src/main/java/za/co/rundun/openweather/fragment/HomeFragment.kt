@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -34,14 +33,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragment_home,
             container,
             false
         )
-        // TODO Investigate purpose
         binding.lifecycleOwner = viewLifecycleOwner
         binding.sharedViewModel = sharedViewModel
         binding.homeViewModel = homeViewModel
@@ -53,7 +51,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 binding.spinner.visibility = View.VISIBLE
                 binding.spinner.animate().alpha(1f).duration = 500
                 binding.whatWeatherButton.animate().alpha(0f).setDuration(500).withEndAction {
-                    binding.whatWeatherButton.visibility =  View.GONE
+                    binding.whatWeatherButton.visibility = View.GONE
                 }
             } else {
                 binding.spinner.alpha = 1f
@@ -72,13 +70,23 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 "https://openweathermap.org/img/w/" + weatherList[0].icon + ".png"
             ("Expect " + weatherList[0].main).also { binding.weatherMain.text = it }
             binding.weatherDescription.text = weatherList[0].description
-            ("Surface measured at " + weatherList[0].temp.toString() + "\u2103").also { binding.weatherTemperature.text = it }
-            ("Atmosphere feels like " + weatherList[0].feelsLike.toString() + "\u2103").also { binding.weatherFeelsLikeTemperature.text = it }
-            binding.weatherWindSpeed.text = weatherList[0].windSpeed.toString()
-            binding.weatherWindDegree.text = weatherList[0].windDegree.toString()
-            homeViewModel.degreeAngle = weatherList[0].windDegree.toFloat()
+            ("Surface measured at " + weatherList[0].temp.toString() + "\u2103").also {
+                binding.weatherTemperature.text = it
+            }
+            ("Atmosphere feels like " + weatherList[0].feelsLike.toString() + "\u2103").also {
+                binding.weatherFeelsLikeTemperature.text = it
+            }
+            ("Wind speed " + weatherList[0].windSpeed.toString() + " m/sec").also {
+                binding.weatherWindSpeed.text = it
+            }
+            ("Wind coming from " + weatherList[0].windDegree.toString() + "\u00B0").also {
+                binding.weatherWindDegree.text = it
+            }
+            binding.windDegreeAngle.updateDegreeAngle(
+                weatherList[0].windDegree.toFloat(),
+                weatherList[0].windSpeed.toFloat()
+            )
             binding.invalidateAll()
-            binding.windDegreeAngle.startAnimation()
         }
 
         binding.setClickListener { view ->
@@ -87,8 +95,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     sharedViewModel.selectItem(2)
                 }
                 R.id.what_weather_card -> {
-
-                }// TODO navigate to weather detail
+                    // TODO navigate to weather detail
+                }
             }
         }
 

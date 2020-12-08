@@ -1,9 +1,9 @@
 package za.co.rundun.openweather.data.database
 
-import za.co.rundun.openweather.common.WeatherResult
-import za.co.rundun.openweather.data.api.service.WeatherService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import za.co.rundun.openweather.common.WeatherResult
+import za.co.rundun.openweather.data.api.service.WeatherService
 import javax.inject.Inject
 
 class WeatherRepository @Inject constructor(
@@ -31,17 +31,5 @@ class WeatherRepository @Inject constructor(
         } catch (e: Exception) {
             WeatherResult.build { throw e }
         }
-
-    }
-
-    companion object {
-        // For Singleton instantiation
-        @Volatile
-        private var instance: WeatherRepository? = null
-
-        fun getInstance(weatherDao: WeatherDAO, weatherService: WeatherService) =
-            instance ?: synchronized(this) {
-                instance ?: WeatherRepository(weatherDao, weatherService).also { instance = it }
-            }
     }
 }

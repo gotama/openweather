@@ -1,13 +1,13 @@
 package za.co.rundun.openweather.data.api.service
 
-import za.co.rundun.openweather.BuildConfig
-import za.co.rundun.openweather.data.api.model.WeatherResponse
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
+import za.co.rundun.openweather.BuildConfig
+import za.co.rundun.openweather.data.api.model.WeatherResponse
 
 interface WeatherService {
     @GET("data/2.5/weather")
