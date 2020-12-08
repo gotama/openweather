@@ -5,17 +5,10 @@ import androidx.lifecycle.ViewModel
 
 class HomeViewModel @ViewModelInject constructor() : ViewModel() {
 
-    private var _imageUrl:  String? = null
+    private var _imageUrl: String? = null
     var imageUrl
         get() = _imageUrl
         set(value) {
             _imageUrl = value
-        }
-
-    private var _degreeAngle:  Float? = 0f
-    var degreeAngle
-        get() = _degreeAngle
-        set(value) {
-            _degreeAngle = value
         }
 }

@@ -13,12 +13,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import androidx.navigation.Navigation.findNavController
-import androidx.navigation.ui.setupWithNavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.OnSuccessListener
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import za.co.rundun.openweather.data.viewmodel.SharedViewModel
 import za.co.rundun.openweather.service.WeatherLocationService
@@ -48,7 +45,6 @@ class MainActivity : AppCompatActivity(), OnSuccessListener<Location>, Permissio
 
         updateCoordinateFromBundle(savedInstanceState)
 
-//        val navController = findNavController(this, R.id.nav_host_fragment)
         sharedViewModel.selectedItem.observe(this, Observer { item ->
             if (item == 2) {
                 updateLocation()

@@ -5,7 +5,7 @@ import android.location.Location
 import androidx.core.content.edit
 import za.co.rundun.openweather.R
 
-fun Location?.toText():String {
+fun Location?.toText(): String {
     return if (this != null) {
         "($latitude, $longitude)"
     } else {
